@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "pl.kliniewski"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -26,5 +26,16 @@ kotlin {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("pl.kliniewski.stock.calculator.MainKt")
+}
+
+tasks.withType<Jar>() {
+    manifest {
+        attributes["Main-Class"] = application.mainClass.orNull
+    }
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile)) {
+            exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA", "META-INF/versions/**")
+        }
+    }
 }
